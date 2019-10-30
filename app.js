@@ -7,7 +7,7 @@ const app = express();
 
 mongoose.Promise = global.Promise;
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect('mongodb://localhost/muber');
+  mongoose.connect('mongodb://localhost/feedu');
 }
 
 app.use(bodyParser.json());

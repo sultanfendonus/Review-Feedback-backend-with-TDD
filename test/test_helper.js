@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 before(done => {
-  mongoose.connect('mongodb://localhost/muber_test');
+  mongoose.connect('mongodb://localhost/feedu_test');
   mongoose.connection
     .once('open', () => done())
     .on('error', error => {
