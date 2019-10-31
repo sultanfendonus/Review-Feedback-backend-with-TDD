@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   firstName : {
       type: String,
@@ -45,8 +46,9 @@ const UserSchema = new Schema({
   status: {
       type: String,
       default: 'enable'
-  }
-});
+  },
+  
+},{timestamps:true});
 
 const User = mongoose.model('user', UserSchema);
 
