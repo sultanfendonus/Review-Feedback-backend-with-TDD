@@ -20,18 +20,17 @@ module.exports = {
     User.findOne({email})
       .then((user)=>{
         if(user){
-          bcrypt.compare(password.toString(), user.password, function(err, result) {
-            if(result===true){
+          user.comparePassword(password.toString(), function(err, isMatch) {
+            if (err) throw err;
+            if(isMatch===true){
               User.findOneAndUpdate({email: user.email},{token: uuidv4()})
                 .then(()=>{
                   res.send(successLoginResponse)
                 })
-             
             }else{
               res.send(failLoginResponse)
             }
-            
-          });
+           });
         }else{
           res.send(failLoginResponse);
         }
