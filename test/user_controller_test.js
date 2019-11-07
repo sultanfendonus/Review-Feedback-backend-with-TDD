@@ -2,6 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
+const UserInstance = require('../models/User')
 
 const User = mongoose.model('user');
 
@@ -29,6 +30,23 @@ describe('Users controller', () => {
             done();
         })
   });
+
+  it('Login Successful',(done)=>{
+
+    const user = new UserInstance({email: "test",password: "test",firstName: "sunny11",lastName: "sultan",isSocial : true})
+    user.save()
+      .then((user)=>{
+        request(app)
+        .post('/api/user/login')
+        .send({email: "test", password: "test"})
+        .end((err,result)=>{
+          assert(result.body.status === 'success')
+          done();
+        })
+
+      })
+    
+  })
 
             
 

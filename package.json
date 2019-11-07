@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha"
+    "test": "NODE_ENV=test mocha",
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "express": "^4.14.0",
     "mocha": "^3.2.0",
     "mongoose": "^4.7.1",
-    "supertest": "^2.0.1"
+    "supertest": "^2.0.1",
+    "uuid": "^3.3.3"
   }
 }
