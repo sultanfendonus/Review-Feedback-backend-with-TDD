@@ -1,8 +1,16 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const global = require('../global/index') 
 const saltRounds = 10;
 const Schema = mongoose.Schema;
 
+const jwsTokenSchema = new Schema({
+    token: {
+        type: String,
+        require: true
+    }
+})
 
 const UserSchema = new Schema({
   email: {
@@ -24,10 +32,6 @@ const UserSchema = new Schema({
   isSocial: {
       type: Boolean,
       required: true
-  },
-  token: {
-      type: String,
-      default: ''
   },
   points:{
       type: Number,
@@ -53,6 +57,8 @@ const UserSchema = new Schema({
       type: String,
       default: 'enable'
   },
+  jwsToken: [jwsTokenSchema]
+  
   
 },{timestamps:true});
 
@@ -73,6 +79,14 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
         cb(null, isMatch);
     });
 };
+
+UserSchema.methods.createJWSToken = async function(){
+    let user = this;
+    const token = jwt.sign({ id: user._id.toString() }, global.randomKey);
+    user.jwsToken = user.jwsToken.concat({token})
+    await user.save()
+    return token;
+}
 
 const User = mongoose.model('user', UserSchema);
 

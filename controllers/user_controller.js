@@ -1,42 +1,48 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const uuidv4 = require('uuid/v4');
 
 module.exports = {
-  create(req, res, next) {
-    const userProp = req.body;
+  async create(req, res, next) {
 
-    User.create(userProp)
-    .then(user => res.send(user))
-    .catch(next)
+    try {
+      const userProp = req.body;
+      const user = new User(userProp)
+
+      const response = await user.save()
+      const token = await user.createJWSToken()
+      
+      res.send({response, token})
+
+    } catch (err){
+      next(err)
+    }
   },
 
-  login(req,res,next) {
-    const email = req.body.email;
-    const password = req.body.password;
-    const successLoginResponse = {status: 'success',message:'Login Successful'}
-    const failLoginResponse = {status: 'fail',message:'Email or Password Invalid'}
+  async login(req,res,next) {
 
-    User.findOne({email})
-      .then((user)=>{
-        if(user){
-          user.comparePassword(password.toString(), function(err, isMatch) {
-            if (err) throw err;
-            if(isMatch===true){
-              User.findOneAndUpdate({email: user.email},{token: uuidv4()})
-                .then(()=>{
-                  res.send(successLoginResponse)
-                })
-            }else{
-              res.send(failLoginResponse)
-            }
-           });
+    try {
+      const email = req.body.email;
+      const password = req.body.password;
+  
+      const user = await User.findOne({email})
+      user.comparePassword(password.toString(), async function(err,isMatch){
+        if(err) throw err
+        if(isMatch){
+          await user.createJWSToken()
+          res.send(user)
         }else{
-          res.send(failLoginResponse);
+          res.status(404).send({message: 'Invalid Email or Password!'})
         }
-        
       })
-      .catch(next)
+      
+    } catch (err) {
+      if (err.message.includes('comparePassword')) {res.status(404).send({message: 'No User Found!'})}
+      else{
+        next(err)
+      }
+      
+    }
+
   },
 
   autoLogin(req,res,next){
@@ -53,6 +59,23 @@ module.exports = {
         }
       })
       .catch(next)
+  },
+
+  async updateProfile(req,res,next){
+    try{
+      const inputValue = req.body;
+      const email = inputValue.email
+      delete inputValue.email
+
+      console.log(email)
+
+      const afterUpdatedUser = await User.findOneAndUpdate({email}, inputValue, {new: true});
+      res.send(afterUpdatedUser);
+
+    }catch(err){
+      next(err)
+    }
+    
   }
 
 };
