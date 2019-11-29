@@ -11,7 +11,7 @@ module.exports = {
       const response = await user.save()
       const token = await user.createJWSToken()
       
-      res.send({response, token})
+      res.send(response)
 
     } catch (err){
       next(err)
@@ -66,8 +66,6 @@ module.exports = {
       const inputValue = req.body;
       const email = inputValue.email
       delete inputValue.email
-
-      console.log(email)
 
       const afterUpdatedUser = await User.findOneAndUpdate({email}, inputValue, {new: true});
       res.send(afterUpdatedUser);

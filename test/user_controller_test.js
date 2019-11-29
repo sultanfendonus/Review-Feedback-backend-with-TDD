@@ -33,14 +33,15 @@ describe('Users controller', () => {
 
   it('Login Successful',(done)=>{
 
-    const user = new UserInstance({email: "test",password: "test",firstName: "sunny11",lastName: "sultan",isSocial : true})
+    const user = new UserInstance({email: "test",password: "test1234",firstName: "sunny11",lastName: "sultan",isSocial : true})
     user.save()
       .then((user)=>{
         request(app)
         .post('/api/user/login')
-        .send({email: "test", password: "test"})
+        .send({email: "test", password: "test1234"})
         .end((err,result)=>{
-          assert(result.body.status === 'success')
+          //console.log(result.status)
+          assert(result.status === 200)
           done();
         })
 

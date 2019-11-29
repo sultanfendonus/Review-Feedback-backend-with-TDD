@@ -27,7 +27,8 @@ const UserSchema = new Schema({
       required : true
   },
   password: {
-      type: String
+      type: String,
+      minlength: 5
   },
   isSocial: {
       type: Boolean,
