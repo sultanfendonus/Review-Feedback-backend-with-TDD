@@ -1,18 +1,11 @@
 const UserController = require('../controllers/user_controller');
 const CategoryController = require('../controllers/category_controller');
+const ItemController = require('../controllers/item_controller')
 const Auth = require('../auth/userAuth')
 const multer  = require('multer')
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now()+ file.originalname)
-  }
-})
-
-const CategoryImageUpload = multer({ storage: storage });
+const path = require('path');
+const ItemImageUpload = require('../multer/item_image')
+const CategoryImageUpload = require('../multer/category_image')
 
 
 module.exports = (app) => {
@@ -28,4 +21,7 @@ module.exports = (app) => {
   app.get('/api/category/list', Auth, CategoryController.list)
   //app.post('/api/category/update', Auth, CategoryController.update)
   //app.post('/api/category/delete', Auth, CategoryController.delete)
+
+  //Items Route
+  app.post('/api/item/new', Auth, ItemImageUpload.single('image'), ItemController.create)
 };

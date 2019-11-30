@@ -12,7 +12,7 @@ const Auth = async (req,res,next)=>{
             throw new Error()
         }
 
-        res.user = user
+        req.user = user
         next();
         
     } catch (error) {
