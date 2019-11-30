@@ -20,6 +20,7 @@ const ReviewSchema = new Schema({
     },
     vote: {
         type: Number,
+        default: 0
     },
     status: {
         type: String,

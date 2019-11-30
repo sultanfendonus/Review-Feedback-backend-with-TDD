@@ -1,6 +1,7 @@
 const UserController = require('../controllers/user_controller');
 const CategoryController = require('../controllers/category_controller');
 const ItemController = require('../controllers/item_controller')
+const ReviewController = require('../controllers/review_controller')
 const Auth = require('../auth/userAuth')
 const multer  = require('multer')
 const path = require('path');
@@ -25,4 +26,8 @@ module.exports = (app) => {
   //Items Route
   app.post('/api/item/new', Auth, ItemImageUpload.single('image'), ItemController.create)
   app.get('/api/item', ItemController.all)
+
+  //Review Route
+  app.post('/api/review/new', Auth, ReviewController.create)
+  app.get('/api/review', ReviewController.all)
 };
