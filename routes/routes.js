@@ -24,4 +24,5 @@ module.exports = (app) => {
 
   //Items Route
   app.post('/api/item/new', Auth, ItemImageUpload.single('image'), ItemController.create)
+  app.get('/api/item', ItemController.all)
 };

@@ -25,7 +25,7 @@ const ReviewSchema = new Schema({
         type: String,
         default: 'active'
     }
-})
+},{timestamps: true})
 
 const Review = mongoose.model('review',ReviewSchema);
 module.exports = Review;
